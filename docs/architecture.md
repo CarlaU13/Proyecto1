@@ -21,16 +21,32 @@ docs/
 |-- architecture.md
 `-- decisions/
     `-- 0001-technology-stack.md
+.github/
+`-- workflows/
+    `-- validate.yml
 ```
 
 - `project.godot` is the project entry configuration and selects the main scene.
 - `src/app/main.tscn` is the single application scene and owns the current static
   bootstrap UI.
 - `docs/` records current architecture and decisions with lasting consequences.
+- `.github/workflows/validate.yml` performs reproducible project import and startup
+  checks with the pinned Godot version.
 
 No script is present because the bootstrap screen requires no runtime behavior.
 No autoloads, managers, shared abstractions, feature modules, or external
 dependencies are justified at this stage.
+
+## Automated validation
+
+The validation workflow downloads the official Godot 4.7.1 Linux editor and
+checks its SHA-256 digest before execution. It confirms the exact engine build,
+imports and parses the project in headless mode, then starts the main scene for a
+bounded number of iterations.
+
+The workflow has read-only repository permissions. It does not run tests, create
+exports, publish artifacts, or validate the Windows distribution. Runtime checks
+on Windows and visual presentation remain local responsibilities.
 
 ## Runtime flow
 

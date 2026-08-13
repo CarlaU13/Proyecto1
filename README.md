@@ -44,5 +44,24 @@ the operating system window controls.
 - Architectural decisions with meaningful consequences are documented.
 - Game mechanics and abstractions are added only when supported by concrete needs.
 
+## Validation
+
+Run the same project checks locally before committing. On Windows PowerShell,
+replace `<godot>` with the path to the Godot 4.7.1 stable executable:
+
+```powershell
+& <godot> --version
+& <godot> --headless --path . --import --verbose
+& <godot> --headless --path . --quit-after 120 --verbose
+git diff --check
+```
+
+The first Godot command must report `4.7.1.stable.official.a13da4feb`. All commands
+must exit successfully without parser, resource, startup, or runtime errors.
+
+GitHub Actions repeats the import and startup checks on every pull request and on
+every push to `main`. The workflow validates the project only; it does not export
+or publish an application.
+
 See [`docs/architecture.md`](docs/architecture.md) for the current project
 structure and boundaries.
