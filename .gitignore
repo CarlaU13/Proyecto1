@@ -1,0 +1,5 @@
+# Godot-generated editor data
+.godot/
+
+# Local build output (export is not configured yet)
+build/
