@@ -63,5 +63,20 @@ GitHub Actions repeats the import and startup checks on every pull request and o
 every push to `main`. The workflow validates the project only; it does not export
 or publish an application.
 
+## Windows build
+
+The repository includes a `Windows x86_64` export preset. Install the official
+Godot 4.7.1 stable export templates, create the output directory, and export a
+release build from Windows PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force build/windows | Out-Null
+& <godot> --headless --path . --export-release "Windows x86_64"
+```
+
+The build is written to `build/windows/Proyecto1.exe` with its accompanying data
+package. The entire `build/` directory is local and ignored by Git. Code signing,
+an installer, release publishing, and automated export are not configured yet.
+
 See [`docs/architecture.md`](docs/architecture.md) for the current project
 structure and boundaries.

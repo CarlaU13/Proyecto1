@@ -14,6 +14,7 @@ neutral bootstrap screen.
 
 ```text
 project.godot
+export_presets.cfg
 src/
 `-- app/
     `-- main.tscn
@@ -27,6 +28,7 @@ docs/
 ```
 
 - `project.godot` is the project entry configuration and selects the main scene.
+- `export_presets.cfg` defines the reproducible Windows x86_64 export settings.
 - `src/app/main.tscn` is the single application scene and owns the current static
   bootstrap UI.
 - `docs/` records current architecture and decisions with lasting consequences.
@@ -47,6 +49,14 @@ bounded number of iterations.
 The workflow has read-only repository permissions. It does not run tests, create
 exports, publish artifacts, or validate the Windows distribution. Runtime checks
 on Windows and visual presentation remain local responsibilities.
+
+## Windows distribution
+
+The `Windows x86_64` preset produces a release executable and separate project
+data package under `build/windows/`. Build artifacts are ignored by Git. The
+preset does not enable code signing, an installer, remote deployment, or automated
+publishing. Those concerns remain deferred until a concrete distribution channel
+requires them.
 
 ## Runtime flow
 
