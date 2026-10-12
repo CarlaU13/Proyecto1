@@ -8,7 +8,8 @@ The final visual style, duration, broader gameplay, content, and personalization
 system remain open. The current playable slice contains two provisional top-down
 rooms, free WASD movement, simple collisions, inspectable objects, narrator
 dialogue, one complete newspaper crossword, and reversible room traversal. It
-contains no birthday content or final assets yet.
+also includes a complete hangman game against the librarian. It contains no
+birthday content or final assets yet.
 
 ## Technology
 
@@ -48,9 +49,10 @@ Current controls:
 
 Inspect the cup, clock, and portrait to reveal the crossword clues. The puzzle
 allows unlimited retries and unlocks the north door when solved. That door leads
-to a provisional library containing a librarian and a word board; their next
-minigame is intentionally not implemented yet. The library door returns to the
-first room without resetting the crossword or door state.
+to a provisional library containing a librarian and a word board. The board
+starts a Spanish hangman game that accepts keyboard or mouse input, allows six
+mistakes, offers optional hints, and permits immediate retries. The library door
+returns to the first room without resetting either puzzle or the door state.
 
 ## Current quality expectations
 

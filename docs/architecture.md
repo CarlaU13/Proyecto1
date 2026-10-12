@@ -10,7 +10,7 @@ remain to be defined.
 The current architecture covers two connected top-down rooms, player movement,
 collisions, nearby-object interaction, reusable dialogue presentation, one
 complete exploration-linked newspaper crossword, and persistent in-session room
-state.
+state. A second concrete puzzle provides a complete hangman round in the library.
 
 ## Structure
 
@@ -25,6 +25,8 @@ src/
 |   |-- player.gd
 |   `-- player.tscn
 |-- puzzles/
+|   |-- hangman.gd
+|   |-- hangman.tscn
 |   |-- newspaper_crossword.gd
 |   `-- newspaper_crossword.tscn
 |-- rooms/
@@ -51,6 +53,8 @@ docs/
   detection.
 - `src/puzzles/newspaper_crossword.*` owns the crossword grid, answer validation,
   unlimited retries, progressive requested hints, and puzzle-local presentation.
+- `src/puzzles/hangman.*` owns its fixed word, alphabet input, mistake drawing,
+  optional hints, round retry, completion state, and puzzle-local presentation.
 - `src/rooms/library.tscn` defines the second room, its physical boundaries,
   provisional librarian, word board, and return door.
 - `src/ui/` presents dialogue and accepts keyboard or mouse progression.
@@ -63,9 +67,10 @@ docs/
 
 Scene composition and signals keep responsibilities separated without global
 state. `Main` retains only the current session's discovered clues and visit state,
-and coordinates the newspaper result with the door. The crossword is intentionally
-a concrete feature, not a generic minigame framework. No autoloads, managers,
-inventory, or external dependencies are justified at this stage.
+and coordinates puzzle results with their immediate world consequences. Both
+puzzles remain concrete features rather than implementations of a generic
+minigame framework. No autoloads, managers, inventory, or external dependencies
+are justified at this stage.
 
 Both rooms currently coexist at separate coordinates in one persistent world.
 `Main` moves the persistent player between explicit spawn markers and asks the
@@ -103,9 +108,11 @@ signal; `Main` uses it to unlock the north door. The unlocked door moves the sam
 player instance to the library, updates camera bounds, and shows an introductory
 dialogue only on the first visit. The return door reverses the transition without
 recreating either room, so the crossword and unlocked door retain their state.
-Dialogue and the puzzle remain separate UI scenes, and closing either restores
-movement. Closing the application uses the normal window controls provided by the
-operating system and Godot.
+Interacting with the library word board opens the hangman scene and disables
+movement. Solving it updates the physical board and librarian dialogue; failing a
+round only enables a local retry. Dialogue and both puzzle scenes remain separate
+UI scenes, and closing any of them restores movement. Closing the application
+uses the normal window controls provided by the operating system and Godot.
 
 ## Provisional settings
 

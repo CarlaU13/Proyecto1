@@ -125,7 +125,7 @@ script = ExtResource("1_interactable")
 interaction_id = &"librarian"
 prompt = "Hablar con el bibliotecario"
 speaker = "Bibliotecario"
-dialogue_lines = PackedStringArray("Llegaste. El crucigrama era el filtro para gente que lee instrucciones.", "Yo custodiaba una palabra, pero alguien borró varias letras del pizarrón.", "No vamos a jugar todavía. Primero necesito decidir si sos detective o apenas tenés buena ortografía.")
+dialogue_lines = PackedStringArray("Llegaste. El crucigrama era el filtro para gente que lee instrucciones.", "Yo custodiaba una palabra, pero alguien borró varias letras del pizarrón.", "El pizarrón está listo. Tenés seis errores antes de que mi dibujo alcance niveles preocupantes de detalle.")
 
 [node name="Shadow" type="Polygon2D" parent="Librarian"]
 position = Vector2(5, 45)
@@ -151,10 +151,10 @@ shape = SubResource("LibrarianInteraction")
 [node name="WordBoard" type="Area2D" parent="."]
 position = Vector2(640, 90)
 script = ExtResource("1_interactable")
-interaction_id = &"word_board"
-prompt = "Examinar el pizarrón"
+interaction_id = &"hangman"
+prompt = "Jugar al ahorcado"
 speaker = "Narrador"
-dialogue_lines = PackedStringArray("Un pizarrón con cinco espacios vacíos y una horca dibujada con entusiasmo administrativo.", "Todavía no podés jugar. El bibliotecario insiste en administrar el suspenso por entregas.")
+dialogue_lines = PackedStringArray("Un pizarrón con cinco espacios vacíos y una horca dibujada con entusiasmo administrativo.")
 
 [node name="Frame" type="Polygon2D" parent="WordBoard"]
 polygon = PackedVector2Array(-118, -62, 118, -62, 118, 62, -118, 62)
