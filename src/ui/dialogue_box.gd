@@ -49,4 +49,4 @@ func _advance() -> void:
 
 func _show_current_line() -> void:
 	text_label.text = lines[line_index]
-	continue_button.text = "Continue  [Enter]" if line_index < lines.size() - 1 else "Close  [Enter]"
+	continue_button.text = "Continuar  [Enter]" if line_index < lines.size() - 1 else "Cerrar  [Enter]"

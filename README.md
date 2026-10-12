@@ -4,10 +4,11 @@ Proyecto1 is an early-stage desktop software project built with Godot and GDScri
 Its eventual purpose is to provide a small interactive experience that delivers a
 personalized birthday surprise.
 
-The final gameplay, visual style, duration, content, and personalization system
-remain open. The current playable slice contains one provisional top-down room,
-free WASD movement, simple collisions, inspectable objects, and narrator dialogue.
-It contains no puzzle, birthday content, or final assets yet.
+The final visual style, duration, broader gameplay, content, and personalization
+system remain open. The current playable slice contains one provisional top-down
+room, free WASD movement, simple collisions, inspectable objects, narrator
+dialogue, and one complete newspaper crossword. It contains no birthday content
+or final assets yet.
 
 ## Technology
 
@@ -22,8 +23,9 @@ The technology choice and its consequences are recorded in
 ## Development requirements
 
 - Godot 4.7.1 stable, including the editor
+- Official Godot 4.7.1 stable export templates for local Windows builds
 - Git
-- Windows is the initial target platform; export support is not configured yet
+- Windows x86_64 is the initial target platform
 
 No third-party dependencies are required.
 
@@ -41,6 +43,11 @@ Current controls:
 - `WASD`: move the character;
 - `E`: inspect a nearby object;
 - `Enter` or the on-screen button: advance dialogue.
+- `H` or the on-screen button: request a hint while reading the crossword;
+- `Escape`: close the crossword.
+
+Inspect the cup, clock, and portrait to reveal the crossword clues. The puzzle
+allows unlimited retries and unlocks the provisional north door when solved.
 
 ## Current quality expectations
 
@@ -49,6 +56,8 @@ Current controls:
 - Changes stay small, reviewable, and free of unnecessary dependencies.
 - Architectural decisions with meaningful consequences are documented.
 - Game mechanics and abstractions are added only when supported by concrete needs.
+- Player-facing text is currently written in Spanish; technical names and
+  repository documentation remain in English.
 
 ## Validation
 

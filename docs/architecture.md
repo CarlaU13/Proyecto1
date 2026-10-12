@@ -8,7 +8,8 @@ surprise. Final gameplay, visual style, duration, content, and personalization
 remain to be defined.
 
 The current architecture covers a single top-down room, player movement,
-collisions, nearby-object interaction, and reusable dialogue presentation.
+collisions, nearby-object interaction, reusable dialogue presentation, and one
+complete exploration-linked newspaper crossword.
 
 ## Structure
 
@@ -22,10 +23,14 @@ src/
 |-- player/
 |   |-- player.gd
 |   `-- player.tscn
+|-- puzzles/
+|   |-- newspaper_crossword.gd
+|   `-- newspaper_crossword.tscn
 |-- ui/
 |   |-- dialogue_box.gd
 |   `-- dialogue_box.tscn
 `-- world/
+    |-- exit_door.gd
     `-- interactable.gd
 docs/
 |-- architecture.md
@@ -41,15 +46,20 @@ docs/
 - `src/app/` composes the room and coordinates player interaction with dialogue.
 - `src/player/` owns movement, collision, camera follow, and nearby-object
   detection.
+- `src/puzzles/newspaper_crossword.*` owns the crossword grid, answer validation,
+  unlimited retries, progressive requested hints, and puzzle-local presentation.
 - `src/ui/` presents dialogue and accepts keyboard or mouse progression.
-- `src/world/interactable.gd` stores the prompt, speaker, and provisional dialogue
-  attached to an inspectable `Area2D`.
+- `src/world/interactable.gd` stores the identity, optional clue identity, prompt,
+  speaker, and dialogue attached to an inspectable `Area2D`.
+- `src/world/exit_door.gd` owns the door's locked/unlocked state and visual change.
 - `docs/` records current architecture and decisions with lasting consequences.
 - `.github/workflows/validate.yml` performs reproducible project import and startup
   checks with the pinned Godot version.
 
 Scene composition and signals keep responsibilities separated without global
-state. No autoloads, managers, generic minigame framework, inventory, or external
+state. `Main` retains only the current room's discovered clues and coordinates the
+newspaper result with the door. The crossword is intentionally a concrete feature,
+not a generic minigame framework. No autoloads, managers, inventory, or external
 dependencies are justified at this stage.
 
 ## Automated validation
@@ -74,10 +84,12 @@ requires them.
 ## Runtime flow
 
 Godot loads `src/app/main.tscn` as the main scene. The player moves through one
-provisional room and detects nearby interactable areas. `Main` converts interaction
-requests into dialogue presentation and temporarily disables movement. Closing the
-application uses the normal window controls provided by the operating system and
-Godot.
+provisional room and detects nearby interactable areas. Inspecting the cup, clock,
+and portrait records three local clues. Reading *La Gaceta Imposible* opens the
+crossword and temporarily disables movement. Correct answers emit a completion
+signal; `Main` uses it to unlock the north door. Dialogue and the puzzle remain
+separate UI scenes, and closing either restores movement. Closing the application
+uses the normal window controls provided by the operating system and Godot.
 
 ## Provisional settings
 

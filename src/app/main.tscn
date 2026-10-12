@@ -1,9 +1,11 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/player/player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://src/world/interactable.gd" id="3_interactable"]
 [ext_resource type="PackedScene" path="res://src/ui/dialogue_box.tscn" id="4_dialogue"]
+[ext_resource type="PackedScene" path="res://src/puzzles/newspaper_crossword.tscn" id="5_crossword"]
+[ext_resource type="Script" path="res://src/world/exit_door.gd" id="6_exit_door"]
 
 [sub_resource type="RectangleShape2D" id="WallHorizontal"]
 size = Vector2(1280, 32)
@@ -20,7 +22,7 @@ size = Vector2(78, 190)
 [sub_resource type="RectangleShape2D" id="TableShape"]
 size = Vector2(210, 112)
 
-[sub_resource type="RectangleShape2D" id="DiaryInteraction"]
+[sub_resource type="RectangleShape2D" id="NewspaperInteraction"]
 size = Vector2(150, 105)
 
 [sub_resource type="RectangleShape2D" id="ClockInteraction"]
@@ -28,6 +30,12 @@ size = Vector2(115, 130)
 
 [sub_resource type="RectangleShape2D" id="PortraitInteraction"]
 size = Vector2(125, 145)
+
+[sub_resource type="RectangleShape2D" id="CupInteraction"]
+size = Vector2(100, 100)
+
+[sub_resource type="RectangleShape2D" id="DoorInteraction"]
+size = Vector2(140, 105)
 
 [sub_resource type="StyleBoxFlat" id="ControlsPanel"]
 bg_color = Color(0.035, 0.042, 0.058, 0.9)
@@ -111,23 +119,28 @@ color = Color(0.43, 0.25, 0.15, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Desk"]
 shape = SubResource("DeskShape")
 
-[node name="Diary" type="Area2D" parent="Room/Desk"]
+[node name="Newspaper" type="Area2D" parent="Room/Desk"]
 position = Vector2(-28, 0)
 script = ExtResource("3_interactable")
-prompt = "Inspect the abandoned diary"
-speaker = "Narrator"
-dialogue_lines = PackedStringArray("A diary, left open on an otherwise immaculate desk.", "The page is blank. Either the ink vanished, or the author finally ran out of dramatic secrets.", "There is a rectangular indentation beneath the paper. Something used to be hidden here.")
+interaction_id = &"newspaper"
+prompt = "Leer La Gaceta Imposible"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("Un diario vespertino publicado antes del desayuno.")
 
-[node name="Book" type="Polygon2D" parent="Room/Desk/Diary"]
+[node name="Paper" type="Polygon2D" parent="Room/Desk/Newspaper"]
 polygon = PackedVector2Array(-40, -27, 40, -27, 40, 27, -40, 27)
 color = Color(0.72, 0.65, 0.48, 1)
 
-[node name="Spine" type="Polygon2D" parent="Room/Desk/Diary"]
-polygon = PackedVector2Array(-4, -27, 4, -27, 4, 27, -4, 27)
-color = Color(0.36, 0.24, 0.18, 1)
+[node name="Headline" type="Polygon2D" parent="Room/Desk/Newspaper"]
+polygon = PackedVector2Array(-32, -19, 32, -19, 32, -14, -32, -14)
+color = Color(0.25, 0.2, 0.14, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Desk/Diary"]
-shape = SubResource("DiaryInteraction")
+[node name="Columns" type="Polygon2D" parent="Room/Desk/Newspaper"]
+polygon = PackedVector2Array(-31, -8, -3, -8, -3, 19, -31, 19, -31, 15, -7, 15, -7, -8, 4, -8, 4, 19, 32, 19, 32, 15, 8, 15, 8, -8)
+color = Color(0.42, 0.36, 0.27, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Desk/Newspaper"]
+shape = SubResource("NewspaperInteraction")
 
 [node name="Cabinet" type="StaticBody2D" parent="Room"]
 position = Vector2(1140, 340)
@@ -150,9 +163,10 @@ shape = SubResource("CabinetShape")
 [node name="Clock" type="Area2D" parent="Room/Cabinet"]
 position = Vector2(0, -125)
 script = ExtResource("3_interactable")
-prompt = "Examine the clock"
-speaker = "Clock"
-dialogue_lines = PackedStringArray("Tick. Tock. Tick. Tock.", "I am perfectly on time. The rest of the house is early.", "No, I will not explain why I have thirteen marks. Learn to count more ambitiously.")
+clue_id = &"clock"
+prompt = "Examinar el reloj"
+speaker = "Reloj"
+dialogue_lines = PackedStringArray("Tic. Tac. Tic. Tac.", "Estoy perfectamente en hora. El resto de la casa llegó temprano.", "No, no voy a explicar por qué tengo trece marcas. Aprendé a contar con más ambición.")
 
 [node name="Face" type="Polygon2D" parent="Room/Cabinet/Clock"]
 polygon = PackedVector2Array(-34, -34, 0, -47, 34, -34, 47, 0, 34, 34, 0, 47, -34, 34, -47, 0)
@@ -184,6 +198,26 @@ color = Color(0.42, 0.25, 0.17, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Table"]
 shape = SubResource("TableShape")
 
+[node name="Cup" type="Area2D" parent="Room/Table"]
+position = Vector2(-35, -5)
+script = ExtResource("3_interactable")
+clue_id = &"cup"
+prompt = "Inspeccionar la taza"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("Una taza vacía. Tiene asa, pero no parece dispuesta a viajar como valija.", "En el fondo alguien escribió: «Nombrar las cosas ayuda». Qué descubrimiento revolucionario.")
+
+[node name="Body" type="Polygon2D" parent="Room/Table/Cup"]
+polygon = PackedVector2Array(-20, -16, 14, -16, 17, 17, -17, 17)
+color = Color(0.72, 0.66, 0.56, 1)
+
+[node name="Handle" type="Line2D" parent="Room/Table/Cup"]
+points = PackedVector2Array(14, -8, 27, -8, 28, 8, 16, 10)
+width = 6.0
+default_color = Color(0.72, 0.66, 0.56, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Table/Cup"]
+shape = SubResource("CupInteraction")
+
 [node name="PortraitFrame" type="Node2D" parent="Room"]
 position = Vector2(120, 250)
 
@@ -201,12 +235,36 @@ color = Color(0.71, 0.58, 0.46, 1)
 
 [node name="Portrait" type="Area2D" parent="Room/PortraitFrame"]
 script = ExtResource("3_interactable")
-prompt = "Question the portrait"
-speaker = "Portrait"
-dialogue_lines = PackedStringArray("You are standing on my carpet.", "Yes, it is on the other side of the room. I can still tell.", "Come back when you have a question worth framing.")
+clue_id = &"portrait"
+prompt = "Interrogar al retrato"
+speaker = "Retrato"
+dialogue_lines = PackedStringArray("Estás pisando mi alfombra.", "Sí, está del otro lado de la habitación. Igual me doy cuenta.", "Volvé cuando tengas una pregunta digna de mi marco. El marco mejora cualquier pregunta.")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room/PortraitFrame/Portrait"]
 shape = SubResource("PortraitInteraction")
+
+[node name="ExitDoor" type="Area2D" parent="Room"]
+position = Vector2(950, 60)
+script = ExtResource("6_exit_door")
+interaction_id = &"exit_door"
+prompt = "Examinar la puerta cerrada"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("La puerta está cerrada.", "La cerradura tiene tres pequeñas ranuras con forma de letras. Muy discreta no es.")
+
+[node name="Frame" type="Polygon2D" parent="Room/ExitDoor"]
+polygon = PackedVector2Array(-68, -32, 68, -32, 68, 36, -68, 36)
+color = Color(0.18, 0.1, 0.08, 1)
+
+[node name="DoorPanel" type="Polygon2D" parent="Room/ExitDoor"]
+polygon = PackedVector2Array(-57, -27, 57, -27, 57, 35, -57, 35)
+color = Color(0.36, 0.2, 0.13, 1)
+
+[node name="Indicator" type="Polygon2D" parent="Room/ExitDoor"]
+polygon = PackedVector2Array(-18, 1, 18, 1, 18, 13, -18, 13)
+color = Color(0.66, 0.26, 0.2, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/ExitDoor"]
+shape = SubResource("DoorInteraction")
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(640, 610)
@@ -231,7 +289,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.82, 0.84, 0.89, 1)
 theme_override_font_sizes/font_size = 16
-text = "WASD  Move\nE       Interact"
+text = "WASD  Moverse\nE       Interactuar"
 
 [node name="Prompt" type="PanelContainer" parent="Interface"]
 visible = false
@@ -245,8 +303,10 @@ theme_override_styles/panel = SubResource("PromptPanel")
 layout_mode = 2
 theme_override_colors/font_color = Color(0.94, 0.87, 0.68, 1)
 theme_override_font_sizes/font_size = 17
-text = "[E] Interact"
+text = "[E] Interactuar"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DialogueBox" parent="Interface" instance=ExtResource("4_dialogue")]
+
+[node name="NewspaperCrossword" parent="Interface" instance=ExtResource("5_crossword")]
