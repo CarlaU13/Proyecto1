@@ -2,13 +2,13 @@
 
 ## Current scope
 
-Proyecto1 is currently a minimal Godot desktop application. Its eventual product
-purpose is a small interactive experience that delivers a personalized birthday
-surprise. Gameplay, visual style, duration, content, and personalization remain
-to be defined.
+Proyecto1 is currently a small playable Godot desktop slice. Its eventual product
+purpose is an interactive experience that delivers a personalized birthday
+surprise. Final gameplay, visual style, duration, content, and personalization
+remain to be defined.
 
-The current architecture deliberately covers only application startup and a
-neutral bootstrap screen.
+The current architecture covers a single top-down room, player movement,
+collisions, nearby-object interaction, and reusable dialogue presentation.
 
 ## Structure
 
@@ -16,8 +16,17 @@ neutral bootstrap screen.
 project.godot
 export_presets.cfg
 src/
-`-- app/
-    `-- main.tscn
+|-- app/
+|   |-- main.gd
+|   `-- main.tscn
+|-- player/
+|   |-- player.gd
+|   `-- player.tscn
+|-- ui/
+|   |-- dialogue_box.gd
+|   `-- dialogue_box.tscn
+`-- world/
+    `-- interactable.gd
 docs/
 |-- architecture.md
 `-- decisions/
@@ -29,14 +38,18 @@ docs/
 
 - `project.godot` is the project entry configuration and selects the main scene.
 - `export_presets.cfg` defines the reproducible Windows x86_64 export settings.
-- `src/app/main.tscn` is the single application scene and owns the current static
-  bootstrap UI.
+- `src/app/` composes the room and coordinates player interaction with dialogue.
+- `src/player/` owns movement, collision, camera follow, and nearby-object
+  detection.
+- `src/ui/` presents dialogue and accepts keyboard or mouse progression.
+- `src/world/interactable.gd` stores the prompt, speaker, and provisional dialogue
+  attached to an inspectable `Area2D`.
 - `docs/` records current architecture and decisions with lasting consequences.
 - `.github/workflows/validate.yml` performs reproducible project import and startup
   checks with the pinned Godot version.
 
-No script is present because the bootstrap screen requires no runtime behavior.
-No autoloads, managers, shared abstractions, feature modules, or external
+Scene composition and signals keep responsibilities separated without global
+state. No autoloads, managers, generic minigame framework, inventory, or external
 dependencies are justified at this stage.
 
 ## Automated validation
@@ -60,9 +73,11 @@ requires them.
 
 ## Runtime flow
 
-Godot loads `src/app/main.tscn` as the main scene. The scene displays two static
-labels on a neutral background. Closing the application uses the normal window
-controls provided by the operating system and Godot.
+Godot loads `src/app/main.tscn` as the main scene. The player moves through one
+provisional room and detects nearby interactable areas. `Main` converts interaction
+requests into dialogue presentation and temporarily disables movement. Closing the
+application uses the normal window controls provided by the operating system and
+Godot.
 
 ## Provisional settings
 

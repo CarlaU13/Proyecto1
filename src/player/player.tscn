@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/player/player.gd" id="1_player"]
+
+[sub_resource type="CapsuleShape2D" id="PlayerShape"]
+radius = 14.0
+height = 34.0
+
+[sub_resource type="CircleShape2D" id="InteractionShape"]
+radius = 64.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_player")
+
+[node name="Shadow" type="Polygon2D" parent="."]
+position = Vector2(3, 14)
+polygon = PackedVector2Array(-16, -6, 0, -10, 16, -6, 18, 4, 0, 9, -18, 4)
+color = Color(0.02, 0.025, 0.035, 0.45)
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-15, -8, -11, -22, 0, -29, 11, -22, 15, -8, 13, 20, -13, 20)
+color = Color(0.3, 0.48, 0.63, 1)
+
+[node name="Coat" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-13, -3, 0, 5, 13, -3, 11, 20, -11, 20)
+color = Color(0.16, 0.26, 0.38, 1)
+
+[node name="Head" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-10, -24, 0, -31, 10, -24, 9, -12, 0, -7, -9, -12)
+color = Color(0.77, 0.61, 0.46, 1)
+
+[node name="LookDirection" type="Node2D" parent="."]
+
+[node name="Marker" type="Polygon2D" parent="LookDirection"]
+position = Vector2(0, -33)
+polygon = PackedVector2Array(0, -7, 5, 3, 0, 1, -5, 3)
+color = Color(0.93, 0.77, 0.35, 0.9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("PlayerShape")
+
+[node name="InteractionDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionDetector"]
+shape = SubResource("InteractionShape")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = 0
+limit_top = 0
+limit_right = 1280
+limit_bottom = 720

@@ -4,10 +4,10 @@ Proyecto1 is an early-stage desktop software project built with Godot and GDScri
 Its eventual purpose is to provide a small interactive experience that delivers a
 personalized birthday surprise.
 
-The gameplay, visual style, duration, content, and personalization system are not
-defined yet. The current repository contains only the technical bootstrap: a
-minimal application with a neutral startup screen and no game mechanics or final
-content.
+The final gameplay, visual style, duration, content, and personalization system
+remain open. The current playable slice contains one provisional top-down room,
+free WASD movement, simple collisions, inspectable objects, and narrator dialogue.
+It contains no puzzle, birthday content, or final assets yet.
 
 ## Technology
 
@@ -33,8 +33,14 @@ No third-party dependencies are required.
 2. Import `project.godot` from this repository.
 3. Run the project with **F5** or the editor's **Run Project** action.
 
-The application should open a neutral bootstrap screen and close normally through
-the operating system window controls.
+The application should open the provisional room and close normally through the
+operating system window controls.
+
+Current controls:
+
+- `WASD`: move the character;
+- `E`: inspect a nearby object;
+- `Enter` or the on-screen button: advance dialogue.
 
 ## Current quality expectations
 

@@ -1,48 +1,252 @@
-[gd_scene format=3]
+[gd_scene load_steps=15 format=3]
 
-[node name="Main" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://src/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://src/world/interactable.gd" id="3_interactable"]
+[ext_resource type="PackedScene" path="res://src/ui/dialogue_box.tscn" id="4_dialogue"]
 
-[node name="Background" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.055, 0.063, 0.082, 1)
-mouse_filter = 2
+[sub_resource type="RectangleShape2D" id="WallHorizontal"]
+size = Vector2(1280, 32)
 
-[node name="Content" type="VBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -54.0
-offset_right = 220.0
-offset_bottom = 54.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 12
+[sub_resource type="RectangleShape2D" id="WallVertical"]
+size = Vector2(32, 720)
 
-[node name="Title" type="Label" parent="Content"]
+[sub_resource type="RectangleShape2D" id="DeskShape"]
+size = Vector2(250, 78)
+
+[sub_resource type="RectangleShape2D" id="CabinetShape"]
+size = Vector2(78, 190)
+
+[sub_resource type="RectangleShape2D" id="TableShape"]
+size = Vector2(210, 112)
+
+[sub_resource type="RectangleShape2D" id="DiaryInteraction"]
+size = Vector2(150, 105)
+
+[sub_resource type="RectangleShape2D" id="ClockInteraction"]
+size = Vector2(115, 130)
+
+[sub_resource type="RectangleShape2D" id="PortraitInteraction"]
+size = Vector2(125, 145)
+
+[sub_resource type="StyleBoxFlat" id="ControlsPanel"]
+bg_color = Color(0.035, 0.042, 0.058, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.43, 0.55, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="PromptPanel"]
+bg_color = Color(0.055, 0.063, 0.082, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72, 0.58, 0.3, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Room" type="Node2D" parent="."]
+
+[node name="Floor" type="Polygon2D" parent="Room"]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 720, 0, 720)
+color = Color(0.16, 0.135, 0.125, 1)
+
+[node name="FloorInset" type="Polygon2D" parent="Room"]
+polygon = PackedVector2Array(38, 38, 1242, 38, 1242, 682, 38, 682)
+color = Color(0.23, 0.19, 0.17, 1)
+
+[node name="Carpet" type="Polygon2D" parent="Room"]
+polygon = PackedVector2Array(350, 210, 930, 210, 985, 550, 295, 550)
+color = Color(0.22, 0.29, 0.31, 1)
+
+[node name="CarpetInner" type="Polygon2D" parent="Room"]
+polygon = PackedVector2Array(376, 236, 904, 236, 950, 524, 330, 524)
+color = Color(0.29, 0.37, 0.38, 1)
+
+[node name="Walls" type="StaticBody2D" parent="Room"]
+
+[node name="Top" type="CollisionShape2D" parent="Room/Walls"]
+position = Vector2(640, 16)
+shape = SubResource("WallHorizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="Room/Walls"]
+position = Vector2(640, 704)
+shape = SubResource("WallHorizontal")
+
+[node name="Left" type="CollisionShape2D" parent="Room/Walls"]
+position = Vector2(16, 360)
+shape = SubResource("WallVertical")
+
+[node name="Right" type="CollisionShape2D" parent="Room/Walls"]
+position = Vector2(1264, 360)
+shape = SubResource("WallVertical")
+
+[node name="Desk" type="StaticBody2D" parent="Room"]
+position = Vector2(640, 105)
+
+[node name="Shadow" type="Polygon2D" parent="Room/Desk"]
+position = Vector2(7, 9)
+polygon = PackedVector2Array(-132, -45, 132, -45, 132, 45, -132, 45)
+color = Color(0.04, 0.035, 0.035, 0.45)
+
+[node name="Surface" type="Polygon2D" parent="Room/Desk"]
+polygon = PackedVector2Array(-132, -45, 132, -45, 132, 45, -132, 45)
+color = Color(0.34, 0.19, 0.12, 1)
+
+[node name="Trim" type="Polygon2D" parent="Room/Desk"]
+polygon = PackedVector2Array(-121, -34, 121, -34, 121, 34, -121, 34)
+color = Color(0.43, 0.25, 0.15, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Desk"]
+shape = SubResource("DeskShape")
+
+[node name="Diary" type="Area2D" parent="Room/Desk"]
+position = Vector2(-28, 0)
+script = ExtResource("3_interactable")
+prompt = "Inspect the abandoned diary"
+speaker = "Narrator"
+dialogue_lines = PackedStringArray("A diary, left open on an otherwise immaculate desk.", "The page is blank. Either the ink vanished, or the author finally ran out of dramatic secrets.", "There is a rectangular indentation beneath the paper. Something used to be hidden here.")
+
+[node name="Book" type="Polygon2D" parent="Room/Desk/Diary"]
+polygon = PackedVector2Array(-40, -27, 40, -27, 40, 27, -40, 27)
+color = Color(0.72, 0.65, 0.48, 1)
+
+[node name="Spine" type="Polygon2D" parent="Room/Desk/Diary"]
+polygon = PackedVector2Array(-4, -27, 4, -27, 4, 27, -4, 27)
+color = Color(0.36, 0.24, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Desk/Diary"]
+shape = SubResource("DiaryInteraction")
+
+[node name="Cabinet" type="StaticBody2D" parent="Room"]
+position = Vector2(1140, 340)
+
+[node name="Body" type="Polygon2D" parent="Room/Cabinet"]
+polygon = PackedVector2Array(-45, -105, 45, -105, 45, 105, -45, 105)
+color = Color(0.29, 0.16, 0.12, 1)
+
+[node name="Door" type="Polygon2D" parent="Room/Cabinet"]
+polygon = PackedVector2Array(-34, -92, 34, -92, 34, 92, -34, 92)
+color = Color(0.39, 0.23, 0.16, 1)
+
+[node name="Handle" type="Polygon2D" parent="Room/Cabinet"]
+polygon = PackedVector2Array(17, -5, 24, -5, 24, 5, 17, 5)
+color = Color(0.75, 0.58, 0.28, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Cabinet"]
+shape = SubResource("CabinetShape")
+
+[node name="Clock" type="Area2D" parent="Room/Cabinet"]
+position = Vector2(0, -125)
+script = ExtResource("3_interactable")
+prompt = "Examine the clock"
+speaker = "Clock"
+dialogue_lines = PackedStringArray("Tick. Tock. Tick. Tock.", "I am perfectly on time. The rest of the house is early.", "No, I will not explain why I have thirteen marks. Learn to count more ambitiously.")
+
+[node name="Face" type="Polygon2D" parent="Room/Cabinet/Clock"]
+polygon = PackedVector2Array(-34, -34, 0, -47, 34, -34, 47, 0, 34, 34, 0, 47, -34, 34, -47, 0)
+color = Color(0.78, 0.72, 0.56, 1)
+
+[node name="Hand" type="Polygon2D" parent="Room/Cabinet/Clock"]
+polygon = PackedVector2Array(-3, 2, 3, 2, 3, -25, -3, -25)
+color = Color(0.16, 0.12, 0.1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Cabinet/Clock"]
+shape = SubResource("ClockInteraction")
+
+[node name="Table" type="StaticBody2D" parent="Room"]
+position = Vector2(640, 420)
+
+[node name="Shadow" type="Polygon2D" parent="Room/Table"]
+position = Vector2(8, 10)
+polygon = PackedVector2Array(-112, -61, 112, -61, 112, 61, -112, 61)
+color = Color(0.04, 0.035, 0.035, 0.42)
+
+[node name="Top" type="Polygon2D" parent="Room/Table"]
+polygon = PackedVector2Array(-112, -61, 112, -61, 112, 61, -112, 61)
+color = Color(0.31, 0.18, 0.13, 1)
+
+[node name="Center" type="Polygon2D" parent="Room/Table"]
+polygon = PackedVector2Array(-94, -44, 94, -44, 94, 44, -94, 44)
+color = Color(0.42, 0.25, 0.17, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/Table"]
+shape = SubResource("TableShape")
+
+[node name="PortraitFrame" type="Node2D" parent="Room"]
+position = Vector2(120, 250)
+
+[node name="Frame" type="Polygon2D" parent="Room/PortraitFrame"]
+polygon = PackedVector2Array(-58, -78, 58, -78, 58, 78, -58, 78)
+color = Color(0.65, 0.48, 0.2, 1)
+
+[node name="Canvas" type="Polygon2D" parent="Room/PortraitFrame"]
+polygon = PackedVector2Array(-45, -65, 45, -65, 45, 65, -45, 65)
+color = Color(0.13, 0.19, 0.22, 1)
+
+[node name="Face" type="Polygon2D" parent="Room/PortraitFrame"]
+polygon = PackedVector2Array(-20, -25, 0, -36, 20, -25, 24, 8, 0, 29, -24, 8)
+color = Color(0.71, 0.58, 0.46, 1)
+
+[node name="Portrait" type="Area2D" parent="Room/PortraitFrame"]
+script = ExtResource("3_interactable")
+prompt = "Question the portrait"
+speaker = "Portrait"
+dialogue_lines = PackedStringArray("You are standing on my carpet.", "Yes, it is on the other side of the room. I can still tell.", "Come back when you have a question worth framing.")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Room/PortraitFrame/Portrait"]
+shape = SubResource("PortraitInteraction")
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(640, 610)
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Controls" type="PanelContainer" parent="Interface"]
+offset_left = 22.0
+offset_top = 22.0
+offset_right = 235.0
+offset_bottom = 90.0
+theme_override_styles/panel = SubResource("ControlsPanel")
+
+[node name="Margin" type="MarginContainer" parent="Interface/Controls"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.93, 0.94, 0.97, 1)
-theme_override_font_sizes/font_size = 36
-text = "Proyecto1"
-horizontal_alignment = 1
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
 
-[node name="Status" type="Label" parent="Content"]
+[node name="Label" type="Label" parent="Interface/Controls/Margin"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.65, 0.69, 0.78, 1)
-theme_override_font_sizes/font_size = 18
-text = "Bootstrap is working."
+theme_override_colors/font_color = Color(0.82, 0.84, 0.89, 1)
+theme_override_font_sizes/font_size = 16
+text = "WASD  Move\nE       Interact"
+
+[node name="Prompt" type="PanelContainer" parent="Interface"]
+visible = false
+offset_left = 388.0
+offset_top = 560.0
+offset_right = 764.0
+offset_bottom = 612.0
+theme_override_styles/panel = SubResource("PromptPanel")
+
+[node name="Label" type="Label" parent="Interface/Prompt"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.87, 0.68, 1)
+theme_override_font_sizes/font_size = 17
+text = "[E] Interact"
 horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DialogueBox" parent="Interface" instance=ExtResource("4_dialogue")]
