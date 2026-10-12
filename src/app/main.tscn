@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/player/player.tscn" id="2_player"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://src/ui/dialogue_box.tscn" id="4_dialogue"]
 [ext_resource type="PackedScene" path="res://src/puzzles/newspaper_crossword.tscn" id="5_crossword"]
 [ext_resource type="Script" path="res://src/world/exit_door.gd" id="6_exit_door"]
+[ext_resource type="PackedScene" path="res://src/rooms/library.tscn" id="7_library"]
 
 [sub_resource type="RectangleShape2D" id="WallHorizontal"]
 size = Vector2(1280, 32)
@@ -246,7 +247,7 @@ shape = SubResource("PortraitInteraction")
 [node name="ExitDoor" type="Area2D" parent="Room"]
 position = Vector2(950, 60)
 script = ExtResource("6_exit_door")
-interaction_id = &"exit_door"
+interaction_id = &"library_entry"
 prompt = "Examinar la puerta cerrada"
 speaker = "Narrador"
 dialogue_lines = PackedStringArray("La puerta está cerrada.", "La cerradura tiene tres pequeñas ranuras con forma de letras. Muy discreta no es.")
@@ -265,6 +266,12 @@ color = Color(0.66, 0.26, 0.2, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Room/ExitDoor"]
 shape = SubResource("DoorInteraction")
+
+[node name="LibraryReturnSpawn" type="Marker2D" parent="Room"]
+position = Vector2(950, 135)
+
+[node name="Library" parent="." instance=ExtResource("7_library")]
+position = Vector2(0, 900)
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(640, 610)

@@ -1,0 +1,204 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://src/world/interactable.gd" id="1_interactable"]
+
+[sub_resource type="RectangleShape2D" id="WallHorizontal"]
+size = Vector2(1280, 32)
+
+[sub_resource type="RectangleShape2D" id="WallVertical"]
+size = Vector2(32, 720)
+
+[sub_resource type="RectangleShape2D" id="ShelfShape"]
+size = Vector2(110, 390)
+
+[sub_resource type="RectangleShape2D" id="DeskShape"]
+size = Vector2(310, 95)
+
+[sub_resource type="RectangleShape2D" id="ReturnDoorInteraction"]
+size = Vector2(145, 105)
+
+[sub_resource type="RectangleShape2D" id="LibrarianInteraction"]
+size = Vector2(130, 150)
+
+[sub_resource type="RectangleShape2D" id="BoardInteraction"]
+size = Vector2(210, 120)
+
+[sub_resource type="RectangleShape2D" id="ChairShape"]
+size = Vector2(75, 75)
+
+[node name="Library" type="Node2D"]
+
+[node name="Floor" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 1280, 0, 1280, 720, 0, 720)
+color = Color(0.105, 0.09, 0.105, 1)
+
+[node name="FloorInset" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(38, 38, 1242, 38, 1242, 682, 38, 682)
+color = Color(0.17, 0.145, 0.16, 1)
+
+[node name="Runner" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(510, 55, 770, 55, 820, 665, 460, 665)
+color = Color(0.22, 0.27, 0.25, 1)
+
+[node name="RunnerInner" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(535, 75, 745, 75, 785, 645, 495, 645)
+color = Color(0.29, 0.35, 0.32, 1)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+
+[node name="Top" type="CollisionShape2D" parent="Walls"]
+position = Vector2(640, 16)
+shape = SubResource("WallHorizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls"]
+position = Vector2(640, 704)
+shape = SubResource("WallHorizontal")
+
+[node name="Left" type="CollisionShape2D" parent="Walls"]
+position = Vector2(16, 360)
+shape = SubResource("WallVertical")
+
+[node name="Right" type="CollisionShape2D" parent="Walls"]
+position = Vector2(1264, 360)
+shape = SubResource("WallVertical")
+
+[node name="LeftShelf" type="StaticBody2D" parent="."]
+position = Vector2(125, 315)
+
+[node name="Body" type="Polygon2D" parent="LeftShelf"]
+polygon = PackedVector2Array(-62, -205, 62, -205, 62, 205, -62, 205)
+color = Color(0.25, 0.13, 0.105, 1)
+
+[node name="Books" type="Polygon2D" parent="LeftShelf"]
+polygon = PackedVector2Array(-48, -188, 48, -188, 48, -132, -48, -132, -48, -115, 48, -115, 48, -58, -48, -58, -48, -41, 48, -41, 48, 17, -48, 17, -48, 34, 48, 34, 48, 92, -48, 92, -48, 109, 48, 109, 48, 188, -48, 188)
+color = Color(0.49, 0.32, 0.25, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftShelf"]
+shape = SubResource("ShelfShape")
+
+[node name="RightShelf" type="StaticBody2D" parent="."]
+position = Vector2(1155, 315)
+
+[node name="Body" type="Polygon2D" parent="RightShelf"]
+polygon = PackedVector2Array(-62, -205, 62, -205, 62, 205, -62, 205)
+color = Color(0.25, 0.13, 0.105, 1)
+
+[node name="Books" type="Polygon2D" parent="RightShelf"]
+polygon = PackedVector2Array(-48, -188, 48, -188, 48, -132, -48, -132, -48, -115, 48, -115, 48, -58, -48, -58, -48, -41, 48, -41, 48, 17, -48, 17, -48, 34, 48, 34, 48, 92, -48, 92, -48, 109, 48, 109, 48, 188, -48, 188)
+color = Color(0.39, 0.3, 0.38, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightShelf"]
+shape = SubResource("ShelfShape")
+
+[node name="InterrogationDesk" type="StaticBody2D" parent="."]
+position = Vector2(640, 375)
+
+[node name="Shadow" type="Polygon2D" parent="InterrogationDesk"]
+position = Vector2(8, 10)
+polygon = PackedVector2Array(-165, -55, 165, -55, 165, 55, -165, 55)
+color = Color(0.02, 0.02, 0.025, 0.5)
+
+[node name="Top" type="Polygon2D" parent="InterrogationDesk"]
+polygon = PackedVector2Array(-165, -55, 165, -55, 165, 55, -165, 55)
+color = Color(0.34, 0.2, 0.14, 1)
+
+[node name="Inset" type="Polygon2D" parent="InterrogationDesk"]
+polygon = PackedVector2Array(-148, -40, 148, -40, 148, 40, -148, 40)
+color = Color(0.43, 0.27, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InterrogationDesk"]
+shape = SubResource("DeskShape")
+
+[node name="VisitorChair" type="StaticBody2D" parent="."]
+position = Vector2(640, 520)
+
+[node name="Seat" type="Polygon2D" parent="VisitorChair"]
+polygon = PackedVector2Array(-40, -35, 40, -35, 40, 35, -40, 35)
+color = Color(0.27, 0.2, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisitorChair"]
+shape = SubResource("ChairShape")
+
+[node name="Librarian" type="Area2D" parent="."]
+position = Vector2(640, 245)
+script = ExtResource("1_interactable")
+interaction_id = &"librarian"
+prompt = "Hablar con el bibliotecario"
+speaker = "Bibliotecario"
+dialogue_lines = PackedStringArray("Llegaste. El crucigrama era el filtro para gente que lee instrucciones.", "Yo custodiaba una palabra, pero alguien borró varias letras del pizarrón.", "No vamos a jugar todavía. Primero necesito decidir si sos detective o apenas tenés buena ortografía.")
+
+[node name="Shadow" type="Polygon2D" parent="Librarian"]
+position = Vector2(5, 45)
+polygon = PackedVector2Array(-34, -10, 0, -17, 34, -10, 38, 5, 0, 14, -38, 5)
+color = Color(0.02, 0.02, 0.025, 0.45)
+
+[node name="Body" type="Polygon2D" parent="Librarian"]
+polygon = PackedVector2Array(-31, 46, -25, -30, 0, -48, 25, -30, 31, 46)
+color = Color(0.22, 0.27, 0.34, 1)
+
+[node name="Face" type="Polygon2D" parent="Librarian"]
+polygon = PackedVector2Array(-17, -35, 0, -47, 17, -35, 15, -11, 0, 1, -15, -11)
+color = Color(0.69, 0.56, 0.44, 1)
+
+[node name="Glasses" type="Line2D" parent="Librarian"]
+points = PackedVector2Array(-17, -25, -5, -25, -5, -16, -17, -16, -17, -25, -5, -20, 5, -20, 5, -25, 17, -25, 17, -16, 5, -16, 5, -25)
+width = 3.0
+default_color = Color(0.8, 0.72, 0.42, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Librarian"]
+shape = SubResource("LibrarianInteraction")
+
+[node name="WordBoard" type="Area2D" parent="."]
+position = Vector2(640, 90)
+script = ExtResource("1_interactable")
+interaction_id = &"word_board"
+prompt = "Examinar el pizarrón"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("Un pizarrón con cinco espacios vacíos y una horca dibujada con entusiasmo administrativo.", "Todavía no podés jugar. El bibliotecario insiste en administrar el suspenso por entregas.")
+
+[node name="Frame" type="Polygon2D" parent="WordBoard"]
+polygon = PackedVector2Array(-118, -62, 118, -62, 118, 62, -118, 62)
+color = Color(0.36, 0.22, 0.13, 1)
+
+[node name="Board" type="Polygon2D" parent="WordBoard"]
+polygon = PackedVector2Array(-105, -49, 105, -49, 105, 49, -105, 49)
+color = Color(0.1, 0.19, 0.16, 1)
+
+[node name="Blanks" type="Label" parent="WordBoard"]
+offset_left = -72.0
+offset_top = 2.0
+offset_right = 72.0
+offset_bottom = 38.0
+theme_override_colors/font_color = Color(0.82, 0.79, 0.67, 1)
+theme_override_font_sizes/font_size = 23
+text = "_  _  _  _  _"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WordBoard"]
+shape = SubResource("BoardInteraction")
+
+[node name="ReturnDoor" type="Area2D" parent="."]
+position = Vector2(950, 660)
+script = ExtResource("1_interactable")
+interaction_id = &"foyer_return"
+prompt = "Volver al salón"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("La puerta vuelve al salón.")
+
+[node name="Frame" type="Polygon2D" parent="ReturnDoor"]
+polygon = PackedVector2Array(-68, -36, 68, -36, 68, 32, -68, 32)
+color = Color(0.18, 0.1, 0.08, 1)
+
+[node name="DoorPanel" type="Polygon2D" parent="ReturnDoor"]
+polygon = PackedVector2Array(-57, -35, 57, -35, 57, 27, -57, 27)
+color = Color(0.25, 0.42, 0.32, 1)
+
+[node name="Indicator" type="Polygon2D" parent="ReturnDoor"]
+polygon = PackedVector2Array(-18, -10, 18, -10, 18, 2, -18, 2)
+color = Color(0.48, 0.9, 0.58, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ReturnDoor"]
+shape = SubResource("ReturnDoorInteraction")
+
+[node name="EntrySpawn" type="Marker2D" parent="."]
+position = Vector2(950, 575)

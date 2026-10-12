@@ -5,10 +5,10 @@ Its eventual purpose is to provide a small interactive experience that delivers 
 personalized birthday surprise.
 
 The final visual style, duration, broader gameplay, content, and personalization
-system remain open. The current playable slice contains one provisional top-down
-room, free WASD movement, simple collisions, inspectable objects, narrator
-dialogue, and one complete newspaper crossword. It contains no birthday content
-or final assets yet.
+system remain open. The current playable slice contains two provisional top-down
+rooms, free WASD movement, simple collisions, inspectable objects, narrator
+dialogue, one complete newspaper crossword, and reversible room traversal. It
+contains no birthday content or final assets yet.
 
 ## Technology
 
@@ -47,7 +47,10 @@ Current controls:
 - `Escape`: close the crossword.
 
 Inspect the cup, clock, and portrait to reveal the crossword clues. The puzzle
-allows unlimited retries and unlocks the provisional north door when solved.
+allows unlimited retries and unlocks the north door when solved. That door leads
+to a provisional library containing a librarian and a word board; their next
+minigame is intentionally not implemented yet. The library door returns to the
+first room without resetting the crossword or door state.
 
 ## Current quality expectations
 

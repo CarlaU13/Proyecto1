@@ -1,15 +1,21 @@
 extends Node2D
 
+const FOYER_BOUNDS := Rect2i(0, 0, 1280, 720)
+const LIBRARY_BOUNDS := Rect2i(0, 900, 1280, 720)
+
 @onready var player: TopDownPlayer = $Player
 @onready var prompt: PanelContainer = $Interface/Prompt
 @onready var prompt_label: Label = $Interface/Prompt/Label
 @onready var dialogue_box: DialogueBox = $Interface/DialogueBox
 @onready var crossword: NewspaperCrossword = $Interface/NewspaperCrossword
 @onready var exit_door: ExitDoor = $Room/ExitDoor
+@onready var foyer_return_spawn: Marker2D = $Room/LibraryReturnSpawn
+@onready var library_entry_spawn: Marker2D = $Library/EntrySpawn
 
 var current_interactable: Interactable
 var discovered_clues: Dictionary = {}
 var show_success_dialogue_on_close: bool = false
+var has_entered_library: bool = false
 
 
 func _ready() -> void:
@@ -38,13 +44,52 @@ func _on_interaction_target_changed(target: Interactable) -> void:
 
 
 func _on_interaction_requested(target: Interactable) -> void:
-	if target.interaction_id == &"newspaper":
-		_open_crossword()
-		return
+	match target.interaction_id:
+		&"newspaper":
+			_open_crossword()
+			return
+		&"library_entry":
+			if exit_door.is_unlocked:
+				_enter_library()
+			else:
+				_open_dialogue(target.speaker, target.dialogue_lines)
+			return
+		&"foyer_return":
+			_return_to_foyer()
+			return
 
 	if not target.clue_id.is_empty():
 		discovered_clues[target.clue_id] = true
 	_open_dialogue(target.speaker, target.dialogue_lines)
+
+
+func _enter_library() -> void:
+	_prepare_room_change()
+	player.place_in_room(library_entry_spawn.global_position, LIBRARY_BOUNDS)
+	if has_entered_library:
+		player.movement_enabled = true
+		return
+
+	has_entered_library = true
+	_open_dialogue(
+		"Narrador",
+		PackedStringArray([
+			"La biblioteca huele a papel viejo, tiza y una cantidad poco reglamentaria de sospecha.",
+			"Al fondo, un bibliotecario espera frente a un pizarrón. No parece sorprendido de verte. Eso es bastante sospechoso.",
+		])
+	)
+
+
+func _return_to_foyer() -> void:
+	_prepare_room_change()
+	player.place_in_room(foyer_return_spawn.global_position, FOYER_BOUNDS)
+	player.movement_enabled = true
+
+
+func _prepare_room_change() -> void:
+	player.movement_enabled = false
+	current_interactable = null
+	prompt.hide()
 
 
 func _open_crossword() -> void:

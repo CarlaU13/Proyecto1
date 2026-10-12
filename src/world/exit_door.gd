@@ -12,11 +12,11 @@ func unlock() -> void:
 		return
 
 	is_unlocked = true
-	prompt = "Abrir la puerta"
+	prompt = "Entrar a la biblioteca"
 	speaker = "Narrador"
 	dialogue_lines = PackedStringArray([
 		"La cerradura cede con un clic. La casa finge que esto estaba previsto.",
-		"Del otro lado espera la próxima parte de la investigación. Todavía no existe, pero espera con mucha actitud.",
+		"Del otro lado hay una biblioteca. Al parecer, los libros también pueden ser testigos.",
 	])
 	door_panel.color = Color(0.25, 0.42, 0.32, 1.0)
 	indicator.color = Color(0.48, 0.9, 0.58, 1.0)

@@ -8,6 +8,7 @@ signal interaction_requested(target: Interactable)
 
 @onready var interaction_detector: Area2D = $InteractionDetector
 @onready var look_direction: Node2D = $LookDirection
+@onready var camera: Camera2D = $Camera2D
 
 var movement_enabled: bool = true
 var current_target: Interactable
@@ -33,6 +34,18 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and current_target != null:
 		interaction_requested.emit(current_target)
 		get_viewport().set_input_as_handled()
+
+
+func place_in_room(spawn_position: Vector2, bounds: Rect2i) -> void:
+	global_position = spawn_position
+	velocity = Vector2.ZERO
+	camera.limit_left = bounds.position.x
+	camera.limit_top = bounds.position.y
+	camera.limit_right = bounds.end.x
+	camera.limit_bottom = bounds.end.y
+	camera.reset_smoothing()
+	current_target = null
+	interaction_target_changed.emit(current_target)
 
 
 func _refresh_interaction_target() -> void:

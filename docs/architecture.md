@@ -7,9 +7,10 @@ purpose is an interactive experience that delivers a personalized birthday
 surprise. Final gameplay, visual style, duration, content, and personalization
 remain to be defined.
 
-The current architecture covers a single top-down room, player movement,
-collisions, nearby-object interaction, reusable dialogue presentation, and one
-complete exploration-linked newspaper crossword.
+The current architecture covers two connected top-down rooms, player movement,
+collisions, nearby-object interaction, reusable dialogue presentation, one
+complete exploration-linked newspaper crossword, and persistent in-session room
+state.
 
 ## Structure
 
@@ -26,6 +27,8 @@ src/
 |-- puzzles/
 |   |-- newspaper_crossword.gd
 |   `-- newspaper_crossword.tscn
+|-- rooms/
+|   `-- library.tscn
 |-- ui/
 |   |-- dialogue_box.gd
 |   `-- dialogue_box.tscn
@@ -48,6 +51,8 @@ docs/
   detection.
 - `src/puzzles/newspaper_crossword.*` owns the crossword grid, answer validation,
   unlimited retries, progressive requested hints, and puzzle-local presentation.
+- `src/rooms/library.tscn` defines the second room, its physical boundaries,
+  provisional librarian, word board, and return door.
 - `src/ui/` presents dialogue and accepts keyboard or mouse progression.
 - `src/world/interactable.gd` stores the identity, optional clue identity, prompt,
   speaker, and dialogue attached to an inspectable `Area2D`.
@@ -57,10 +62,17 @@ docs/
   checks with the pinned Godot version.
 
 Scene composition and signals keep responsibilities separated without global
-state. `Main` retains only the current room's discovered clues and coordinates the
-newspaper result with the door. The crossword is intentionally a concrete feature,
-not a generic minigame framework. No autoloads, managers, inventory, or external
-dependencies are justified at this stage.
+state. `Main` retains only the current session's discovered clues and visit state,
+and coordinates the newspaper result with the door. The crossword is intentionally
+a concrete feature, not a generic minigame framework. No autoloads, managers,
+inventory, or external dependencies are justified at this stage.
+
+Both rooms currently coexist at separate coordinates in one persistent world.
+`Main` moves the persistent player between explicit spawn markers and asks the
+player scene to update its camera bounds. This small arrangement preserves local
+state without an autoload or room manager. It is provisional: scene loading should
+only replace it if room count, memory use, or independent room lifecycles create a
+concrete need.
 
 ## Automated validation
 
@@ -83,13 +95,17 @@ requires them.
 
 ## Runtime flow
 
-Godot loads `src/app/main.tscn` as the main scene. The player moves through one
-provisional room and detects nearby interactable areas. Inspecting the cup, clock,
-and portrait records three local clues. Reading *La Gaceta Imposible* opens the
-crossword and temporarily disables movement. Correct answers emit a completion
-signal; `Main` uses it to unlock the north door. Dialogue and the puzzle remain
-separate UI scenes, and closing either restores movement. Closing the application
-uses the normal window controls provided by the operating system and Godot.
+Godot loads `src/app/main.tscn` as the main scene. The player moves through two
+provisional rooms and detects nearby interactable areas. Inspecting the cup,
+clock, and portrait records three local clues. Reading *La Gaceta Imposible* opens
+the crossword and temporarily disables movement. Correct answers emit a completion
+signal; `Main` uses it to unlock the north door. The unlocked door moves the same
+player instance to the library, updates camera bounds, and shows an introductory
+dialogue only on the first visit. The return door reverses the transition without
+recreating either room, so the crossword and unlocked door retain their state.
+Dialogue and the puzzle remain separate UI scenes, and closing either restores
+movement. Closing the application uses the normal window controls provided by the
+operating system and Godot.
 
 ## Provisional settings
 
