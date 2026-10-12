@@ -11,6 +11,7 @@ The current architecture covers two connected top-down rooms, player movement,
 collisions, nearby-object interaction, reusable dialogue presentation, one
 complete exploration-linked newspaper crossword, and persistent in-session room
 state. A second concrete puzzle provides a complete hangman round in the library.
+The hangman answer is reused as the password for a persistent evidence chest.
 
 ## Structure
 
@@ -25,6 +26,8 @@ src/
 |   |-- player.gd
 |   `-- player.tscn
 |-- puzzles/
+|   |-- chest_lock.gd
+|   |-- chest_lock.tscn
 |   |-- hangman.gd
 |   |-- hangman.tscn
 |   |-- newspaper_crossword.gd
@@ -35,10 +38,12 @@ src/
 |   |-- dialogue_box.gd
 |   `-- dialogue_box.tscn
 `-- world/
+    |-- evidence_chest.gd
     |-- exit_door.gd
     `-- interactable.gd
 docs/
 |-- architecture.md
+|-- gameplay.md
 `-- decisions/
     `-- 0001-technology-stack.md
 .github/
@@ -55,12 +60,16 @@ docs/
   unlimited retries, progressive requested hints, and puzzle-local presentation.
 - `src/puzzles/hangman.*` owns its fixed word, alphabet input, mistake drawing,
   optional hints, round retry, completion state, and puzzle-local presentation.
+- `src/puzzles/chest_lock.*` owns password entry, unlimited attempts, its hint,
+  and presentation of the evidence found after unlocking.
 - `src/rooms/library.tscn` defines the second room, its physical boundaries,
   provisional librarian, word board, and return door.
 - `src/ui/` presents dialogue and accepts keyboard or mouse progression.
 - `src/world/interactable.gd` stores the identity, optional clue identity, prompt,
   speaker, and dialogue attached to an inspectable `Area2D`.
 - `src/world/exit_door.gd` owns the door's locked/unlocked state and visual change.
+- `src/world/evidence_chest.gd` owns the chest's closed/open state and world visual
+  change.
 - `docs/` records current architecture and decisions with lasting consequences.
 - `.github/workflows/validate.yml` performs reproducible project import and startup
   checks with the pinned Godot version.
@@ -71,6 +80,11 @@ and coordinates puzzle results with their immediate world consequences. Both
 puzzles remain concrete features rather than implementations of a generic
 minigame framework. No autoloads, managers, inventory, or external dependencies
 are justified at this stage.
+
+The chest password references `HangmanGame.WORD`, keeping the current answer in a
+single place. This is a direct dependency between two consecutive concrete
+features, not a general puzzle-data system. It should be revisited only if several
+features begin sharing configurable puzzle data.
 
 Both rooms currently coexist at separate coordinates in one persistent world.
 `Main` moves the persistent player between explicit spawn markers and asks the
@@ -110,9 +124,12 @@ dialogue only on the first visit. The return door reverses the transition withou
 recreating either room, so the crossword and unlocked door retain their state.
 Interacting with the library word board opens the hangman scene and disables
 movement. Solving it updates the physical board and librarian dialogue; failing a
-round only enables a local retry. Dialogue and both puzzle scenes remain separate
-UI scenes, and closing any of them restores movement. Closing the application
-uses the normal window controls provided by the operating system and Godot.
+round only enables a local retry. Dialogue and all puzzle scenes remain separate
+UI scenes. The same hangman word configures the library chest password. A correct
+entry opens the world chest and replaces the password view with the evidence
+briefing; reopening the chest returns directly to that briefing. Closing any UI
+scene restores movement. Closing the application uses the normal window controls
+provided by the operating system and Godot.
 
 ## Provisional settings
 

@@ -9,6 +9,7 @@ const LIBRARY_BOUNDS := Rect2i(0, 900, 1280, 720)
 @onready var dialogue_box: DialogueBox = $Interface/DialogueBox
 @onready var crossword: NewspaperCrossword = $Interface/NewspaperCrossword
 @onready var hangman: HangmanGame = $Interface/HangmanGame
+@onready var chest_lock: ChestLock = $Interface/ChestLock
 @onready var exit_door: ExitDoor = $Room/ExitDoor
 @onready var foyer_return_spawn: Marker2D = $Room/LibraryReturnSpawn
 @onready var library_entry_spawn: Marker2D = $Library/EntrySpawn
@@ -16,6 +17,7 @@ const LIBRARY_BOUNDS := Rect2i(0, 900, 1280, 720)
 @onready var word_board: Interactable = $Library/WordBoard
 @onready var word_board_surface: Polygon2D = $Library/WordBoard/Board
 @onready var word_board_text: Label = $Library/WordBoard/Blanks
+@onready var evidence_chest: EvidenceChest = $Library/EvidenceChest
 
 var current_interactable: Interactable
 var discovered_clues: Dictionary = {}
@@ -32,6 +34,9 @@ func _ready() -> void:
 	crossword.solved.connect(_on_crossword_solved)
 	hangman.closed.connect(_on_hangman_closed)
 	hangman.solved.connect(_on_hangman_solved)
+	chest_lock.closed.connect(_on_chest_lock_closed)
+	chest_lock.unlocked.connect(_on_chest_unlocked)
+	chest_lock.password = HangmanGame.WORD
 	call_deferred("_show_introduction")
 
 
@@ -67,6 +72,9 @@ func _on_interaction_requested(target: Interactable) -> void:
 			return
 		&"hangman":
 			_open_hangman()
+			return
+		&"evidence_chest":
+			_open_chest_lock()
 			return
 
 	if not target.clue_id.is_empty():
@@ -113,6 +121,12 @@ func _open_hangman() -> void:
 	player.movement_enabled = false
 	prompt.hide()
 	hangman.open()
+
+
+func _open_chest_lock() -> void:
+	player.movement_enabled = false
+	prompt.hide()
+	chest_lock.open()
 
 
 func _open_dialogue(speaker: String, lines: PackedStringArray) -> void:
@@ -180,8 +194,23 @@ func _on_hangman_closed() -> void:
 	_update_prompt()
 
 
+func _on_chest_unlocked() -> void:
+	evidence_chest.unlock()
+
+
+func _on_chest_lock_closed() -> void:
+	player.movement_enabled = true
+	_update_prompt()
+
+
 func _update_prompt() -> void:
-	if current_interactable == null or dialogue_box.visible or crossword.visible or hangman.visible:
+	if (
+		current_interactable == null
+		or dialogue_box.visible
+		or crossword.visible
+		or hangman.visible
+		or chest_lock.visible
+	):
 		prompt.hide()
 		return
 

@@ -1,0 +1,181 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/puzzles/chest_lock.gd" id="1_chest_lock"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle"]
+bg_color = Color(0.17, 0.115, 0.08, 1)
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
+border_color = Color(0.49, 0.33, 0.17, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 14
+
+[sub_resource type="StyleBoxFlat" id="ButtonStyle"]
+bg_color = Color(0.39, 0.25, 0.13, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+content_margin_left = 18.0
+content_margin_top = 9.0
+content_margin_right = 18.0
+content_margin_bottom = 9.0
+
+[node name="ChestLock" type="ColorRect"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+color = Color(0.015, 0.018, 0.025, 0.84)
+script = ExtResource("1_chest_lock")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(900, 540)
+layout_mode = 2
+theme_override_styles/panel = SubResource("PanelStyle")
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 18
+
+[node name="Content" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.82, 0.6, 1)
+theme_override_font_sizes/font_size = 28
+text = "COFRE DE EVIDENCIAS"
+horizontal_alignment = 1
+
+[node name="Rule" type="HSeparator" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+
+[node name="CodeSection" type="VBoxContainer" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Prompt" type="Label" parent="Center/Panel/Margin/Content/CodeSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.79, 0.63, 1)
+theme_override_font_sizes/font_size = 21
+text = "La cerradura requiere una palabra de cinco letras."
+horizontal_alignment = 1
+
+[node name="CodeInput" type="LineEdit" parent="Center/Panel/Margin/Content/CodeSection"]
+custom_minimum_size = Vector2(440, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 25
+placeholder_text = "Escribí la clave"
+alignment = 1
+max_length = 16
+clear_button_enabled = true
+
+[node name="Status" type="Label" parent="Center/Panel/Margin/Content/CodeSection"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.82, 0.72, 0.56, 1)
+theme_override_font_sizes/font_size = 16
+text = "Estado"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Center/Panel/Margin/Content/CodeSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Unlock" type="Button" parent="Center/Panel/Margin/Content/CodeSection/Actions"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("ButtonStyle")
+text = "Abrir cofre [Enter]"
+
+[node name="Hint" type="Button" parent="Center/Panel/Margin/Content/CodeSection/Actions"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("ButtonStyle")
+text = "Pedir pista"
+
+[node name="EvidenceSection" type="VBoxContainer" parent="Center/Panel/Margin/Content"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="OpenStatus" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.58, 0.88, 0.6, 1)
+theme_override_font_sizes/font_size = 16
+text = "ABIERTO · La cerradura reconoce la palabra. El cofre evita admitirlo con entusiasmo."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="IncidentTitle" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.94, 0.84, 0.66, 1)
+theme_override_font_sizes/font_size = 18
+text = "EXPEDIENTE: LA REUNIÓN DE MEDIANOCHE"
+
+[node name="Incident" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.79, 0.68, 1)
+theme_override_font_sizes/font_size = 15
+text = "Alguien reemplazó el paquete reservado para la anfitriona por una caja vacía. Todas las personas presentes aseguran haber visto el regalo original. Una de ellas está improvisando."
+autowrap_mode = 2
+
+[node name="Participants" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.79, 0.68, 1)
+theme_override_font_sizes/font_size = 15
+text = "PARTICIPANTES PROVISIONALES\nLa Detective · El Bibliotecario · La Ilusionista · La Testigo · El Invitado Tardío"
+autowrap_mode = 2
+
+[node name="Protocol" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.84, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "PROTOCOLO DE INTERROGATORIO\nTodos recibirán una palabra secreta, excepto el impostor, que recibirá solamente una pista relacionada. Cada participante dirá una palabra vinculada. Habrá que descubrir quién intenta mezclarse sin conocer el secreto."
+autowrap_mode = 2
+
+[node name="Note" type="Label" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.6, 0.5, 1)
+theme_override_font_sizes/font_size = 13
+text = "Los nombres, la palabra secreta, las declaraciones y la identidad del impostor todavía no fueron definidos."
+autowrap_mode = 2
+
+[node name="Close" type="Button" parent="Center/Panel/Margin/Content"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("ButtonStyle")
+text = "Cerrar [Esc]"

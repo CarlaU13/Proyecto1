@@ -8,8 +8,9 @@ The final visual style, duration, broader gameplay, content, and personalization
 system remain open. The current playable slice contains two provisional top-down
 rooms, free WASD movement, simple collisions, inspectable objects, narrator
 dialogue, one complete newspaper crossword, and reversible room traversal. It
-also includes a complete hangman game against the librarian. It contains no
-birthday content or final assets yet.
+also includes a complete hangman game against the librarian and a password chest
+that reveals the setup for a later deduction game. It contains no birthday
+content or final assets yet.
 
 ## Technology
 
@@ -52,7 +53,9 @@ allows unlimited retries and unlocks the north door when solved. That door leads
 to a provisional library containing a librarian and a word board. The board
 starts a Spanish hangman game that accepts keyboard or mouse input, allows six
 mistakes, offers optional hints, and permits immediate retries. The library door
-returns to the first room without resetting either puzzle or the door state.
+returns to the first room without resetting either puzzle or the door state. The
+hangman answer also opens the evidence chest; its contents document the provisional
+participants and rules for a future impostor round.
 
 ## Current quality expectations
 
@@ -99,4 +102,5 @@ package. The entire `build/` directory is local and ignored by Git. Code signing
 an installer, release publishing, and automated export are not configured yet.
 
 See [`docs/architecture.md`](docs/architecture.md) for the current project
-structure and boundaries.
+structure and boundaries. See [`docs/gameplay.md`](docs/gameplay.md) for the
+currently implemented sequence and the agreed impostor-game concept.

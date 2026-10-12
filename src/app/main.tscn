@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/player/player.tscn" id="2_player"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://src/world/exit_door.gd" id="6_exit_door"]
 [ext_resource type="PackedScene" path="res://src/rooms/library.tscn" id="7_library"]
 [ext_resource type="PackedScene" path="res://src/puzzles/hangman.tscn" id="8_hangman"]
+[ext_resource type="PackedScene" path="res://src/puzzles/chest_lock.tscn" id="9_chest_lock"]
 
 [sub_resource type="RectangleShape2D" id="WallHorizontal"]
 size = Vector2(1280, 32)
@@ -320,3 +321,5 @@ vertical_alignment = 1
 [node name="NewspaperCrossword" parent="Interface" instance=ExtResource("5_crossword")]
 
 [node name="HangmanGame" parent="Interface" instance=ExtResource("8_hangman")]
+
+[node name="ChestLock" parent="Interface" instance=ExtResource("9_chest_lock")]

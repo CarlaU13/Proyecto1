@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://src/world/interactable.gd" id="1_interactable"]
+[ext_resource type="Script" path="res://src/world/evidence_chest.gd" id="2_evidence_chest"]
 
 [sub_resource type="RectangleShape2D" id="WallHorizontal"]
 size = Vector2(1280, 32)
@@ -25,6 +26,12 @@ size = Vector2(210, 120)
 
 [sub_resource type="RectangleShape2D" id="ChairShape"]
 size = Vector2(75, 75)
+
+[sub_resource type="RectangleShape2D" id="ChestBodyShape"]
+size = Vector2(130, 65)
+
+[sub_resource type="RectangleShape2D" id="ChestInteraction"]
+size = Vector2(175, 120)
 
 [node name="Library" type="Node2D"]
 
@@ -176,6 +183,45 @@ horizontal_alignment = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WordBoard"]
 shape = SubResource("BoardInteraction")
+
+[node name="EvidenceChest" type="Area2D" parent="."]
+position = Vector2(305, 590)
+script = ExtResource("2_evidence_chest")
+interaction_id = &"evidence_chest"
+prompt = "Examinar el cofre cerrado"
+speaker = "Narrador"
+dialogue_lines = PackedStringArray("Un cofre con cerradura de letras.")
+
+[node name="Shadow" type="Polygon2D" parent="EvidenceChest"]
+position = Vector2(7, 9)
+polygon = PackedVector2Array(-72, -35, 72, -35, 72, 35, -72, 35)
+color = Color(0.02, 0.02, 0.025, 0.5)
+
+[node name="Body" type="Polygon2D" parent="EvidenceChest"]
+polygon = PackedVector2Array(-68, -31, 68, -31, 68, 31, -68, 31)
+color = Color(0.28, 0.18, 0.11, 1)
+
+[node name="Lid" type="Polygon2D" parent="EvidenceChest"]
+position = Vector2(0, -28)
+polygon = PackedVector2Array(-68, -15, 68, -15, 60, 15, -60, 15)
+color = Color(0.39, 0.25, 0.13, 1)
+
+[node name="Bands" type="Polygon2D" parent="EvidenceChest"]
+polygon = PackedVector2Array(-53, -31, -45, -31, -45, 31, -53, 31, 45, -31, 53, -31, 53, 31, 45, 31)
+color = Color(0.52, 0.4, 0.2, 1)
+
+[node name="LockPlate" type="Polygon2D" parent="EvidenceChest"]
+position = Vector2(0, -4)
+polygon = PackedVector2Array(-16, -14, 16, -14, 16, 14, -16, 14)
+color = Color(0.72, 0.55, 0.24, 1)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="EvidenceChest"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EvidenceChest/StaticBody2D"]
+shape = SubResource("ChestBodyShape")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EvidenceChest"]
+shape = SubResource("ChestInteraction")
 
 [node name="ReturnDoor" type="Area2D" parent="."]
 position = Vector2(950, 660)
