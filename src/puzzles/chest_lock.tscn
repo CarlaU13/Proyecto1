@@ -169,8 +169,16 @@ autowrap_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.66, 0.6, 0.5, 1)
 theme_override_font_sizes/font_size = 13
-text = "Los nombres, la palabra secreta, las declaraciones y la identidad del impostor todavía no fueron definidos."
+text = "Los roles, la palabra y las declaraciones de esta primera ronda son provisionales y podrán reemplazarse."
 autowrap_mode = 2
+
+[node name="StartInterrogation" type="Button" parent="Center/Panel/Margin/Content/EvidenceSection"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.96, 0.88, 0.72, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("ButtonStyle")
+text = "Iniciar interrogatorio"
 
 [node name="Close" type="Button" parent="Center/Panel/Margin/Content"]
 layout_mode = 2

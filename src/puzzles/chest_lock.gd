@@ -3,6 +3,7 @@ extends ColorRect
 
 signal closed
 signal unlocked
+signal interrogation_requested
 
 @onready var code_section: VBoxContainer = $Center/Panel/Margin/Content/CodeSection
 @onready var prompt_label: Label = $Center/Panel/Margin/Content/CodeSection/Prompt
@@ -11,6 +12,7 @@ signal unlocked
 @onready var unlock_button: Button = $Center/Panel/Margin/Content/CodeSection/Actions/Unlock
 @onready var hint_button: Button = $Center/Panel/Margin/Content/CodeSection/Actions/Hint
 @onready var evidence_section: VBoxContainer = $Center/Panel/Margin/Content/EvidenceSection
+@onready var interrogation_button: Button = $Center/Panel/Margin/Content/EvidenceSection/StartInterrogation
 @onready var close_button: Button = $Center/Panel/Margin/Content/Close
 
 var password: String = ""
@@ -22,6 +24,7 @@ func _ready() -> void:
 	unlock_button.pressed.connect(_submit_code)
 	hint_button.pressed.connect(_show_hint)
 	code_input.text_submitted.connect(_on_code_submitted)
+	interrogation_button.pressed.connect(_request_interrogation)
 	close_button.pressed.connect(close)
 	hide()
 
@@ -79,6 +82,15 @@ func _show_evidence() -> void:
 	code_section.hide()
 	evidence_section.show()
 	close_button.grab_focus()
+
+
+func _request_interrogation() -> void:
+	hide()
+	interrogation_requested.emit()
+
+
+func mark_interrogation_solved() -> void:
+	interrogation_button.text = "Revisar interrogatorio resuelto"
 
 
 func _failure_message() -> String:

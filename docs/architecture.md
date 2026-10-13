@@ -11,7 +11,8 @@ The current architecture covers two connected top-down rooms, player movement,
 collisions, nearby-object interaction, reusable dialogue presentation, one
 complete exploration-linked newspaper crossword, and persistent in-session room
 state. A second concrete puzzle provides a complete hangman round in the library.
-The hangman answer is reused as the password for a persistent evidence chest.
+The hangman answer is reused as the password for a persistent evidence chest,
+which leads to one complete word-association impostor round.
 
 ## Structure
 
@@ -30,6 +31,8 @@ src/
 |   |-- chest_lock.tscn
 |   |-- hangman.gd
 |   |-- hangman.tscn
+|   |-- impostor_game.gd
+|   |-- impostor_game.tscn
 |   |-- newspaper_crossword.gd
 |   `-- newspaper_crossword.tscn
 |-- rooms/
@@ -62,6 +65,8 @@ docs/
   optional hints, round retry, completion state, and puzzle-local presentation.
 - `src/puzzles/chest_lock.*` owns password entry, unlimited attempts, its hint,
   and presentation of the evidence found after unlocking.
+- `src/puzzles/impostor_game.*` owns the current round data, participant choices,
+  progressive hints, accusation results, and solved state.
 - `src/rooms/library.tscn` defines the second room, its physical boundaries,
   provisional librarian, word board, and return door.
 - `src/ui/` presents dialogue and accepts keyboard or mouse progression.
@@ -127,9 +132,12 @@ movement. Solving it updates the physical board and librarian dialogue; failing 
 round only enables a local retry. Dialogue and all puzzle scenes remain separate
 UI scenes. The same hangman word configures the library chest password. A correct
 entry opens the world chest and replaces the password view with the evidence
-briefing; reopening the chest returns directly to that briefing. Closing any UI
-scene restores movement. Closing the application uses the normal window controls
-provided by the operating system and Godot.
+briefing; reopening the chest returns directly to that briefing. The briefing
+starts the impostor round, where the player knows the secret word and selects among
+five statements. Incorrect selections remain discarded, while the correct choice
+persists as solved for the session. Closing any UI scene restores movement.
+Closing the application uses the normal window controls provided by the operating
+system and Godot.
 
 ## Provisional settings
 

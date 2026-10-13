@@ -10,6 +10,7 @@ const LIBRARY_BOUNDS := Rect2i(0, 900, 1280, 720)
 @onready var crossword: NewspaperCrossword = $Interface/NewspaperCrossword
 @onready var hangman: HangmanGame = $Interface/HangmanGame
 @onready var chest_lock: ChestLock = $Interface/ChestLock
+@onready var impostor_game: ImpostorGame = $Interface/ImpostorGame
 @onready var exit_door: ExitDoor = $Room/ExitDoor
 @onready var foyer_return_spawn: Marker2D = $Room/LibraryReturnSpawn
 @onready var library_entry_spawn: Marker2D = $Library/EntrySpawn
@@ -36,6 +37,9 @@ func _ready() -> void:
 	hangman.solved.connect(_on_hangman_solved)
 	chest_lock.closed.connect(_on_chest_lock_closed)
 	chest_lock.unlocked.connect(_on_chest_unlocked)
+	chest_lock.interrogation_requested.connect(_open_impostor_game)
+	impostor_game.closed.connect(_on_impostor_game_closed)
+	impostor_game.solved.connect(_on_impostor_game_solved)
 	chest_lock.password = HangmanGame.WORD
 	call_deferred("_show_introduction")
 
@@ -129,6 +133,11 @@ func _open_chest_lock() -> void:
 	chest_lock.open()
 
 
+func _open_impostor_game() -> void:
+	prompt.hide()
+	impostor_game.open()
+
+
 func _open_dialogue(speaker: String, lines: PackedStringArray) -> void:
 	player.movement_enabled = false
 	prompt.hide()
@@ -203,6 +212,15 @@ func _on_chest_lock_closed() -> void:
 	_update_prompt()
 
 
+func _on_impostor_game_closed() -> void:
+	player.movement_enabled = true
+	_update_prompt()
+
+
+func _on_impostor_game_solved() -> void:
+	chest_lock.mark_interrogation_solved()
+
+
 func _update_prompt() -> void:
 	if (
 		current_interactable == null
@@ -210,6 +228,7 @@ func _update_prompt() -> void:
 		or crossword.visible
 		or hangman.visible
 		or chest_lock.visible
+		or impostor_game.visible
 	):
 		prompt.hide()
 		return
